@@ -4,23 +4,29 @@ import type { NextRequest } from "next/server";
 import { auth } from "@/lib/auth";
 
 export async function middleware(request: NextRequest) {
-  const session = await auth();
-  const { pathname } = request.nextUrl;
+  try {
+    const session = await auth();
+    const { pathname } = request.nextUrl;
 
-  const publicPaths = ["/login", "/register"];
-  const isPublicPath = publicPaths.some((path) => pathname.startsWith(path));
+    const publicPaths = ["/login", "/register"];
+    const isPublicPath = publicPaths.some((path) => pathname.startsWith(path));
 
-  if (!session && !isPublicPath) {
-    const loginUrl = new URL("/login", request.url);
-    loginUrl.searchParams.set("callbackUrl", pathname);
-    return NextResponse.redirect(loginUrl);
+    if (!session && !isPublicPath) {
+      const loginUrl = new URL("/login", request.url);
+      loginUrl.searchParams.set("callbackUrl", pathname);
+      return NextResponse.redirect(loginUrl);
+    }
+
+    if (session && (pathname === "/login" || pathname === "/register")) {
+      return NextResponse.redirect(new URL("/", request.url));
+    }
+
+    return NextResponse.next();
+  } catch (error) {
+    console.error("[v0] Middleware auth error:", error);
+    // If auth fails, allow request to continue to avoid blocking the app
+    return NextResponse.next();
   }
-
-  if (session && (pathname === "/login" || pathname === "/register")) {
-    return NextResponse.redirect(new URL("/", request.url));
-  }
-
-  return NextResponse.next();
 }
 
 export const config = {

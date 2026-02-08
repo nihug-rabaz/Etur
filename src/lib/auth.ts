@@ -26,6 +26,7 @@ async function ensureRoleColumn() {
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   adapter: DrizzleAdapter(db) as Adapter,
+  trustHost: true,
   providers: [
     CredentialsProvider({
       name: "Credentials",
