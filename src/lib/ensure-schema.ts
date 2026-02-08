@@ -1,10 +1,10 @@
-import type { Sql } from "postgres";
+import type { NeonQueryFunction } from "@neondatabase/serverless";
 
 /**
  * Best-effort schema bootstrap for environments without migrations.
  * Keeps the app running by creating missing tables/columns.
  */
-export async function ensureTaskHierarchySchema(sql: Sql) {
+export async function ensureTaskHierarchySchema(sql: NeonQueryFunction<false, false>) {
   // 1) Parent tasks table
   await sql`
     CREATE TABLE IF NOT EXISTS "parentTask" (

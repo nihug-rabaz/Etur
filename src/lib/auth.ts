@@ -4,16 +4,9 @@ import { eq } from "drizzle-orm";
 import NextAuth from "next-auth";
 import { Adapter } from "next-auth/adapters";
 import CredentialsProvider from "next-auth/providers/credentials";
-import postgres from "postgres";
 
-import { env } from "@/env.mjs";
-import { db, users } from "@/lib/schema";
-
-const sql = postgres(process.env.DATABASE_URL!, {
-  max: 1,
-  idle_timeout: 20,
-  connect_timeout: 10,
-});
+import { db, sql } from "@/lib/db";
+import { users } from "@/lib/schema";
 
 async function ensureRoleColumn() {
   try {
@@ -33,6 +26,7 @@ async function ensureRoleColumn() {
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   adapter: DrizzleAdapter(db) as Adapter,
+  trustHost: true,
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -139,5 +133,5 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
   pages: {
     signIn: "/login",
   },
-  secret: env.NEXTAUTH_SECRET,
+  secret: process.env.NEXTAUTH_SECRET || "dev-secret-change-in-production",
 });

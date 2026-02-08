@@ -1,7 +1,7 @@
-import postgres from "postgres";
+import type { NeonQueryFunction } from "@neondatabase/serverless";
 
 export async function canUserSeeTask(
-  sql: postgres.Sql,
+  sql: NeonQueryFunction<false, false>,
   userId: string,
   userRole: string,
   taskId: string,
@@ -43,7 +43,7 @@ export async function canUserSeeTask(
 }
 
 export async function canUserSeeParentTask(
-  sql: postgres.Sql,
+  sql: NeonQueryFunction<false, false>,
   userId: string,
   userRole: string,
   parentTaskId: string,

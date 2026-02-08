@@ -1,10 +1,4 @@
-import postgres from "postgres";
-
-const sql = postgres(process.env.DATABASE_URL!, {
-  max: 1,
-  idle_timeout: 20,
-  connect_timeout: 10,
-});
+import { sql } from "@/lib/db";
 
 const defaultDomains = ["פיתוח", "שיווק", "תמיכה", "מכירות", "ניהול"];
 
@@ -21,7 +15,5 @@ export async function seedDomains() {
   } catch (error) {
     console.error("Error seeding domains:", error);
     throw error;
-  } finally {
-    await sql.end();
   }
 }
