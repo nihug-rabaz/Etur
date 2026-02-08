@@ -1,15 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import postgres from "postgres";
 
 import { auth } from "@/lib/auth";
+import { sql } from "@/lib/db";
 import { ensureTaskHierarchySchema } from "@/lib/ensure-schema";
 import { canUserSeeTask } from "@/lib/visibility";
-
-const sql = postgres(process.env.DATABASE_URL!, {
-  max: 1,
-  idle_timeout: 20,
-  connect_timeout: 10,
-});
 
 export async function PATCH(
   req: NextRequest,
@@ -97,11 +91,8 @@ export async function PATCH(
     updates.push(`"updatedAt" = NOW()`);
 
     if (updates.length > 1) {
-      await sql.unsafe(`
-        UPDATE "task"
-        SET ${updates.join(", ")}
-        WHERE id = $${values.length + 1}
-      `, [...values, id]);
+      const query = `UPDATE "task" SET ${updates.join(", ")} WHERE id = $${values.length + 1}`;
+      await sql(query, [...values, id]);
     }
 
     return NextResponse.json(

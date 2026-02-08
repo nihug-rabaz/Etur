@@ -1,15 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import postgres from "postgres";
 
 import { auth } from "@/lib/auth";
+import { sql } from "@/lib/db";
 import { ensureTaskHierarchySchema } from "@/lib/ensure-schema";
 import { isValidSection, isValidTopic, TOPICS_BY_SECTION } from "@/lib/topics";
-
-const sql = postgres(process.env.DATABASE_URL!, {
-  max: 1,
-  idle_timeout: 20,
-  connect_timeout: 10,
-});
 
 export async function GET(
   req: NextRequest,

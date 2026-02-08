@@ -4,9 +4,9 @@ import { z } from "zod";
 export const env = createEnv({
   server: {
     DATABASE_URL: z.string().min(1),
-    APP_URL: z.string().url().min(1),
+    APP_URL: z.string().url().optional(),
     GOOGLE_SITE_VERIFICATION_ID: z.string().optional(),
-    NEXTAUTH_SECRET: z.string().min(1),
+    NEXTAUTH_SECRET: z.string().optional(),
     NEXTAUTH_URL: z.string().url().optional(),
   },
   client: {},

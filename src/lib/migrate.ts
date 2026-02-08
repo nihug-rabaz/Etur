@@ -1,12 +1,7 @@
 import { readFileSync } from "fs";
 import { join } from "path";
-import postgres from "postgres";
 
-const sql = postgres(process.env.DATABASE_URL!, {
-  max: 1,
-  idle_timeout: 20,
-  connect_timeout: 10,
-});
+import { sql } from "@/lib/db";
 
 export async function runMigration(migrationFileName: string) {
   try {
@@ -19,14 +14,12 @@ export async function runMigration(migrationFileName: string) {
       .filter((s) => s.length > 0);
 
     for (const statement of statements) {
-      await sql.unsafe(statement);
+      await sql(statement);
     }
 
     console.log(`Migration ${migrationFileName} completed successfully`);
-    await sql.end();
   } catch (error) {
     console.error("Migration error:", error);
-    await sql.end();
     throw error;
   }
 }

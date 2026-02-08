@@ -1,12 +1,7 @@
 import bcrypt from "bcryptjs";
 import { NextRequest, NextResponse } from "next/server";
-import postgres from "postgres";
 
-const sql = postgres(process.env.DATABASE_URL!, {
-  max: 1,
-  idle_timeout: 20,
-  connect_timeout: 10,
-});
+import { sql } from "@/lib/db";
 
 async function ensurePasswordColumn() {
   try {
