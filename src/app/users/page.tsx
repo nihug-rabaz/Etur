@@ -280,9 +280,8 @@ export default function UsersPage() {
               </thead>
               <tbody>
                 {users.map((user) => (
-                  <>
+                  <React.Fragment key={user.id}>
                     <tr
-                      key={user.id}
                       className="border-b transition-colors hover:bg-muted/50"
                     >
                       <td className="px-6 py-4">
@@ -432,7 +431,7 @@ export default function UsersPage() {
                         </td>
                       </tr>
                     )}
-                  </>
+                  </React.Fragment>
                 ))}
               </tbody>
             </table>
