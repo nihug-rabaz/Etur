@@ -43,7 +43,6 @@ export const metadata: Metadata = {
 };
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
-  console.log("[v0] RootLayout rendering, siteConfig.url:", siteConfig.url);
   return (
     <html lang="he" dir="rtl" suppressHydrationWarning>
       <body className={cn("min-h-screen font-sans", fonts)}>

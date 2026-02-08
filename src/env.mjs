@@ -13,6 +13,6 @@ export const env = {
     return process.env.NEXTAUTH_SECRET || "dev-secret-change-me";
   },
   get NEXTAUTH_URL() {
-    return process.env.NEXTAUTH_URL || "";
+    return process.env.NEXTAUTH_URL || process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000";
   },
 };
