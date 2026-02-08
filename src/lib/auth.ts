@@ -2,22 +2,28 @@ import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import bcrypt from "bcryptjs";
 import { eq } from "drizzle-orm";
 import NextAuth from "next-auth";
-import { Adapter } from "next-auth/adapters";
+import type { Adapter } from "next-auth/adapters";
 import CredentialsProvider from "next-auth/providers/credentials";
 import postgres from "postgres";
 
 import { env } from "@/env.mjs";
 import { db, users } from "@/lib/schema";
 
-const sql = process.env.DATABASE_URL
-  ? postgres(process.env.DATABASE_URL, {
+let _sql: ReturnType<typeof postgres> | null = null;
+function getSql() {
+  if (!_sql && process.env.DATABASE_URL) {
+    _sql = postgres(process.env.DATABASE_URL, {
       max: 1,
       idle_timeout: 20,
       connect_timeout: 10,
-    })
-  : (null as unknown as ReturnType<typeof postgres>);
+    });
+  }
+  return _sql;
+}
 
 async function ensureRoleColumn() {
+  const sql = getSql();
+  if (!sql) return;
   try {
     await sql`SELECT role FROM "user" LIMIT 1`;
   } catch (error: unknown) {
@@ -33,8 +39,12 @@ async function ensureRoleColumn() {
   }
 }
 
+const adapter: Adapter | undefined = db
+  ? (DrizzleAdapter(db) as Adapter)
+  : undefined;
+
 export const { auth, handlers, signIn, signOut } = NextAuth({
-  adapter: DrizzleAdapter(db) as Adapter,
+  adapter,
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -44,6 +54,10 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
+          return null;
+        }
+        if (!db) {
+          console.error("Database not connected");
           return null;
         }
 
@@ -74,7 +88,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             return null;
           }
 
-          const userRole = (user as any).role || "חפ״ש";
+          const userRole = (user as Record<string, unknown>).role as string || "חפ״ש";
 
           return {
             id: user.id,
@@ -98,10 +112,10 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       if (user) {
         token.id = user.id;
         token.email = user.email;
-        token.role = (user as any).role || "חפ״ש";
+        token.role = (user as Record<string, unknown>).role as string || "חפ״ש";
       }
-      
-      if (trigger === "update") {
+
+      if (trigger === "update" && db) {
         try {
           await ensureRoleColumn();
           const currentUser = await db
@@ -113,15 +127,18 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             token.role = currentUser[0].role || "חפ״ש";
           }
         } catch {
-          try {
-            const [row] = await sql`
-              SELECT role FROM "user" WHERE id = ${token.id as string} LIMIT 1
-            `;
-            if (row) {
-              token.role = (row as { role: string }).role || "חפ״ש";
+          const sql = getSql();
+          if (sql) {
+            try {
+              const [row] = await sql`
+                SELECT role FROM "user" WHERE id = ${token.id as string} LIMIT 1
+              `;
+              if (row) {
+                token.role = (row as { role: string }).role || "חפ״ש";
+              }
+            } catch {
+              token.role = token.role || "חפ״ש";
             }
-          } catch {
-            token.role = token.role || "חפ״ש";
           }
         }
       }
