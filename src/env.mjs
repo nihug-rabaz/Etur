@@ -1,20 +1,18 @@
-import { createEnv } from "@t3-oss/env-nextjs";
-import { z } from "zod";
-
-export const env = createEnv({
-  server: {
-    DATABASE_URL: z.string().min(1),
-    APP_URL: z.string().min(1).default("http://localhost:3000"),
-    GOOGLE_SITE_VERIFICATION_ID: z.string().optional(),
-    NEXTAUTH_SECRET: z.string().min(1),
-    NEXTAUTH_URL: z.string().optional(),
+/** @type {{ DATABASE_URL: string; APP_URL: string; GOOGLE_SITE_VERIFICATION_ID: string; NEXTAUTH_SECRET: string; NEXTAUTH_URL: string }} */
+export const env = {
+  get DATABASE_URL() {
+    return process.env.DATABASE_URL || "";
   },
-  client: {},
-  runtimeEnv: {
-    DATABASE_URL: process.env.DATABASE_URL,
-    APP_URL: process.env.APP_URL || "http://localhost:3000",
-    GOOGLE_SITE_VERIFICATION_ID: process.env.GOOGLE_SITE_VERIFICATION_ID,
-    NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
-    NEXTAUTH_URL: process.env.NEXTAUTH_URL,
+  get APP_URL() {
+    return process.env.APP_URL || "http://localhost:3000";
   },
-});
+  get GOOGLE_SITE_VERIFICATION_ID() {
+    return process.env.GOOGLE_SITE_VERIFICATION_ID || "";
+  },
+  get NEXTAUTH_SECRET() {
+    return process.env.NEXTAUTH_SECRET || "dev-secret-change-me";
+  },
+  get NEXTAUTH_URL() {
+    return process.env.NEXTAUTH_URL || "";
+  },
+};

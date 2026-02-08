@@ -9,11 +9,13 @@ import postgres from "postgres";
 import { env } from "@/env.mjs";
 import { db, users } from "@/lib/schema";
 
-const sql = postgres(process.env.DATABASE_URL!, {
-  max: 1,
-  idle_timeout: 20,
-  connect_timeout: 10,
-});
+const sql = process.env.DATABASE_URL
+  ? postgres(process.env.DATABASE_URL, {
+      max: 1,
+      idle_timeout: 20,
+      connect_timeout: 10,
+    })
+  : (null as unknown as ReturnType<typeof postgres>);
 
 async function ensureRoleColumn() {
   try {

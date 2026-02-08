@@ -9,13 +9,17 @@ import {
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 
-const connectionString = process.env.DATABASE_URL!;
-const client = postgres(connectionString, {
-  max: 1,
-  idle_timeout: 20,
-  connect_timeout: 10,
-});
-export const db = drizzle(client);
+const connectionString = process.env.DATABASE_URL || "";
+const client = connectionString
+  ? postgres(connectionString, {
+      max: 1,
+      idle_timeout: 20,
+      connect_timeout: 10,
+    })
+  : (null as unknown as ReturnType<typeof postgres>);
+export const db = connectionString
+  ? drizzle(client)
+  : (null as unknown as ReturnType<typeof drizzle>);
 
 export const users = pgTable("user", {
   id: text("id")
