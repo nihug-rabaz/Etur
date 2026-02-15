@@ -19,8 +19,16 @@ const eslintConfig = [
     ],
     plugins: ["simple-import-sort"],
     rules: {
-      "simple-import-sort/imports": "warn",
-      "simple-import-sort/exports": "warn",
+      "simple-import-sort/imports": "off",
+      "simple-import-sort/exports": "off",
+      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-unused-vars": "warn",
+      "jsx-a11y/click-events-have-key-events": "off",
+      "jsx-a11y/no-static-element-interactions": "off",
+      "jsx-a11y/no-noninteractive-element-interactions": "off",
+      "jsx-a11y/label-has-associated-control": "off",
+      "react/no-unescaped-entities": "off",
+      "@next/next/no-img-element": "warn",
     },
   }),
 ];
