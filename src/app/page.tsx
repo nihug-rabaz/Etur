@@ -708,11 +708,11 @@ export default function HomePage() {
   }
 
   return (
-    <div className="container mx-auto py-6">
+    <div className="container mx-auto py-5">
       {/* Header with Tabs */}
-      <div className="mb-6 space-y-4">
+      <div className="mb-5 space-y-3.5">
         <div className="flex items-center justify-between">
-          <h1 className="text-3xl font-bold">לוח משימות</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">לוח משימות</h1>
           {((session?.user as any)?.role === "מפקד צוות" || (session?.user as any)?.role === "מנהל") && (
             <div className="flex gap-2">
               <Button 
@@ -725,32 +725,32 @@ export default function HomePage() {
                   }
                   handleOpenCreateTask();
                 }}
-                className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-md hover:shadow-lg transition-all"
+                className="h-9 shadow-sm"
               >
-                <Icons.plus className="ml-2 h-4 w-4" />
+                <Icons.plus className="ml-1.5 h-4 w-4" />
                 {activeTab === "parent-tasks" ? "משימת אב חדשה" : "משימה חדשה"}
               </Button>
             </div>
           )}
         </div>
 
-        <div className="flex gap-2 border-b-2 border-gray-200">
+        <div className="flex gap-1 border-b border-border">
           <button
             onClick={() => setActiveTab("tasks")}
-            className={`px-6 py-3 font-bold text-sm transition-all rounded-t-lg ${
+            className={`px-4 py-2 font-medium text-sm transition-all ${
               activeTab === "tasks"
-                ? "bg-gradient-to-b from-blue-500 to-blue-600 text-white shadow-lg border-b-2 border-blue-700"
-                : "text-gray-600 hover:text-blue-600 hover:bg-blue-50"
+                ? "border-b-2 border-foreground text-foreground"
+                : "text-muted-foreground hover:text-foreground"
             }`}
           >
             משימות
           </button>
           <button
             onClick={() => setActiveTab("parent-tasks")}
-            className={`px-6 py-3 font-bold text-sm transition-all rounded-t-lg ${
+            className={`px-4 py-2 font-medium text-sm transition-all ${
               activeTab === "parent-tasks"
-                ? "bg-gradient-to-b from-purple-500 to-purple-600 text-white shadow-lg border-b-2 border-purple-700"
-                : "text-gray-600 hover:text-purple-600 hover:bg-purple-50"
+                ? "border-b-2 border-foreground text-foreground"
+                : "text-muted-foreground hover:text-foreground"
             }`}
           >
             משימות אב
@@ -772,9 +772,9 @@ export default function HomePage() {
       </div>
 
       {/* Main Layout with Sidebar and Kanban */}
-      <div className="flex gap-6">
+      <div className="flex gap-4">
         {activeTab === "tasks" && (
-          <div className="flex-shrink-0" style={{ width: "520px", minWidth: "520px" }}>
+          <div className="flex-shrink-0" style={{ width: "500px", minWidth: "500px" }}>
             <PinnedTasksSidebar
               pinnedTasks={pinnedTasks}
               allTasks={filteredTasks}

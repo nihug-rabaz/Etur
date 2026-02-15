@@ -15,22 +15,25 @@ type TaskCardProps = {
 
 const getSectionColor = (section?: string | null) => {
   if (section === "מיצוב") return {
-    bg: "bg-blue-500",
-    text: "text-blue-700",
-    bgLight: "bg-blue-100",
-    border: "border-blue-300",
+    bg: "bg-blue-600",
+    text: "text-blue-700 dark:text-blue-300",
+    bgLight: "bg-blue-50 dark:bg-blue-950/30",
+    border: "border-blue-200 dark:border-blue-800",
+    indicator: "bg-blue-500",
   };
   if (section === "איתור") return {
-    bg: "bg-green-500",
-    text: "text-green-700",
-    bgLight: "bg-green-100",
-    border: "border-green-300",
+    bg: "bg-emerald-600",
+    text: "text-emerald-700 dark:text-emerald-300",
+    bgLight: "bg-emerald-50 dark:bg-emerald-950/30",
+    border: "border-emerald-200 dark:border-emerald-800",
+    indicator: "bg-emerald-500",
   };
   return {
-    bg: "bg-gray-400",
-    text: "text-gray-700",
-    bgLight: "bg-gray-100",
-    border: "border-gray-300",
+    bg: "bg-gray-500",
+    text: "text-gray-700 dark:text-gray-300",
+    bgLight: "bg-gray-50 dark:bg-gray-900/30",
+    border: "border-gray-200 dark:border-gray-800",
+    indicator: "bg-gray-400",
   };
 };
 
@@ -48,13 +51,13 @@ export const TaskCard = ({
 
   return (
     <div
-      className={`group relative overflow-hidden rounded-lg border-2 transition-all cursor-pointer p-4 ${
+      className={`group relative overflow-hidden rounded-lg border transition-all cursor-pointer ${
         isChildTask
-          ? `${status.stickyNoteBorder} ${status.stickyNoteColor} ${status.stickyNoteShadow} hover:shadow-xl hover:scale-[1.02] hover:rotate-1`
-          : "border-gray-200 bg-white shadow-sm hover:shadow-md"
+          ? `${status.stickyNoteBorder} ${status.stickyNoteColor} ${status.stickyNoteShadow} hover:shadow-lg hover:scale-[1.01] p-3.5`
+          : "border-border bg-card hover:shadow-md hover:border-foreground/20 p-3.5"
       }`}
       style={isChildTask ? {
-        transform: 'rotate(-0.5deg)',
+        transform: 'rotate(-0.3deg)',
       } : {}}
       onClick={onClick}
       draggable={draggable}
@@ -62,63 +65,63 @@ export const TaskCard = ({
     >
       {/* Sticky note corner effect for child tasks */}
       {isChildTask && (
-        <div className="absolute top-0 right-0 w-0 h-0 border-l-[25px] border-l-transparent border-t-[25px] border-t-black/15" />
+        <div className="absolute top-0 right-0 w-0 h-0 border-l-[20px] border-l-transparent border-t-[20px] border-t-black/10" />
       )}
-      {/* Status color bar on right - thicker (only for child tasks) */}
+      {/* Status indicator dot on right (only for child tasks) */}
       {isChildTask && (
         <div
-          className={`absolute right-0 top-0 h-full w-3 ${status.color}`}
+          className={`absolute right-2 top-2 h-2 w-2 rounded-full ${status.color}`}
         />
       )}
-      {/* Section color bar on left (if section exists) */}
+      {/* Section color indicator (if section exists) */}
       {task.section && !isChildTask && (
         <div
-          className={`absolute left-0 top-0 h-full w-2 ${sectionColors.bg}`}
+          className={`absolute left-0 top-0 h-full w-1 rounded-r-sm ${sectionColors.indicator}`}
         />
       )}
 
       <div className="absolute left-2 top-2 z-10 flex flex-col gap-1">
-        <span className={`rounded-md px-2 py-0.5 text-xs font-medium shadow-sm ${priority.color}`}>
+        <span className={`rounded-md px-2 py-0.5 text-[11px] font-medium ${priority.color}`}>
           {priority.label}
         </span>
         {task.isGeneral && (
-          <span className="rounded-md px-2 py-0.5 text-xs font-medium shadow-sm bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300">
+          <span className="rounded-md px-2 py-0.5 text-[11px] font-medium bg-purple-100 text-purple-700 dark:bg-purple-900/50 dark:text-purple-300">
             כללי
           </span>
         )}
       </div>
 
-      <div className={`pr-3 ${isChildTask ? "relative z-10" : ""}`}>
+      <div className={`${isChildTask ? "relative z-10" : ""}`}>
         {task.parentTitle && (
           <div className="mb-2 flex items-center">
-            <span className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold shadow-md border-2 ${
+            <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium border ${
               isChildTask 
-                ? "bg-white/90 text-gray-800 border-gray-400 backdrop-blur-sm" 
-                : "bg-gray-100 text-gray-700 border-gray-300"
+                ? "bg-card/80 text-foreground border-border backdrop-blur-sm" 
+                : "bg-muted text-muted-foreground border-border"
             }`}>
-              <Icons.chevronUp className="h-3.5 w-3.5 text-gray-600" />
-              <span className="text-[10px] text-gray-500 font-medium">משימת אב:</span>
-              <span className="font-bold text-gray-900">{task.parentTitle}</span>
+              <Icons.chevronUp className="h-3 w-3" />
+              <span className="text-[10px] opacity-70">אב:</span>
+              <span className="font-semibold">{task.parentTitle}</span>
             </span>
           </div>
         )}
-        <h3 className={`mb-2 font-bold leading-tight ${isChildTask ? status.textColor : "text-gray-900"} ${isChildTask ? "drop-shadow-sm" : ""}`}>
+        <h3 className={`mb-1.5 font-semibold leading-snug text-[15px] ${isChildTask ? status.textColor : "text-foreground"}`}>
           {task.title}
         </h3>
 
         {task.description && (
-          <p className={`${isChildTask ? status.textColor : "text-muted-foreground"} ${isChildTask ? "opacity-90" : "opacity-80"} mb-3 line-clamp-2 text-sm`}>
+          <p className={`${isChildTask ? status.textColor : "text-muted-foreground"} ${isChildTask ? "opacity-85" : ""} mb-2.5 line-clamp-2 text-[13px] leading-relaxed`}>
             {task.description}
           </p>
         )}
 
-        <div className="mb-3 flex flex-wrap gap-2 items-center">
+        <div className="mb-2.5 flex flex-wrap gap-1.5 items-center">
           {task.section && !isChildTask && (
-            <span className={`rounded-md px-2 py-0.5 text-xs font-bold text-white shadow-sm ${sectionColors.bg}`}>
+            <span className={`rounded-md px-2 py-0.5 text-[11px] font-semibold text-white ${sectionColors.bg}`}>
               {task.section}
             </span>
           )}
-          <span className={`rounded-md ${sectionColors.bgLight} ${sectionColors.text} px-2 py-0.5 text-xs font-medium border ${sectionColors.border}`}>
+          <span className={`rounded-md ${sectionColors.bgLight} ${sectionColors.text} px-2 py-0.5 text-[11px] font-medium border ${sectionColors.border}`}>
             {task.topic}
           </span>
         </div>
@@ -136,29 +139,29 @@ export const TaskCard = ({
                 <div
                   key={collab.id}
                   className="relative"
-                  style={{ marginRight: index > 0 ? "-8px" : "0" }}
+                  style={{ marginRight: index > 0 ? "-6px" : "0" }}
                   title={collab.name || collab.email}
                 >
                   <Avatar
                     name={collab.name}
                     email={collab.email}
                     size="sm"
-                    className="border-2 border-white"
+                    className="border-2 border-card ring-1 ring-border"
                   />
                 </div>
               ))
             ) : (
-              <span className="text-muted-foreground text-xs">
+              <span className="text-muted-foreground text-[11px]">
                 אין שותפים
               </span>
             )}
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5">
             {task.discussionCount != null && task.discussionCount > 0 && (
-              <span className={`rounded-full px-2 py-0.5 text-xs font-medium flex items-center gap-1 ${
+              <span className={`rounded-md px-1.5 py-0.5 text-[11px] font-medium flex items-center gap-1 ${
                 task.hasUnreadDiscussion
-                  ? "bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300"
-                  : "bg-gray-100 text-gray-700"
+                  ? "bg-red-100 text-red-700 dark:bg-red-950/50 dark:text-red-300"
+                  : "bg-muted text-muted-foreground"
               }`}>
                 <Icons.messageCircle className="h-3 w-3" />
                 {task.discussionCount}
@@ -168,8 +171,8 @@ export const TaskCard = ({
               </span>
             )}
             {task.dueDate && (
-              <span className={`${isChildTask ? status.textColor : "text-muted-foreground"} ${isChildTask ? "opacity-90" : "opacity-70"} text-xs font-semibold`}>
-                <Icons.calendar className="inline h-3 w-3 mr-1" />
+              <span className={`${isChildTask ? status.textColor : "text-muted-foreground"} ${isChildTask ? "opacity-85" : ""} text-[11px] font-medium flex items-center gap-1`}>
+                <Icons.calendar className="h-3 w-3" />
                 {new Date(task.dueDate).toLocaleDateString(
                   "he-IL",
                   {

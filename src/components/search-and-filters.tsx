@@ -25,20 +25,21 @@ export const SearchAndFilters = ({
   topics,
 }: SearchAndFiltersProps) => {
   return (
-    <div className="flex flex-wrap gap-3 rounded-lg border bg-card p-4">
+    <div className="flex flex-wrap gap-2.5 rounded-lg border border-border bg-card/50 backdrop-blur-sm p-3">
       <div className="flex-1 min-w-[200px]">
         <Input
           type="text"
           placeholder="חפש משימות..."
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
-          className="w-full"
+          className="w-full h-9"
         />
       </div>
       <div className="min-w-[150px]">
         <Select
           value={selectedDomain}
           onChange={(e) => onDomainChange(e.target.value)}
+          className="h-9"
         >
           <option value="all">כל התחומים</option>
           {domains.map((domain) => (
@@ -52,6 +53,7 @@ export const SearchAndFilters = ({
         <Select
           value={selectedTopic}
           onChange={(e) => onTopicChange(e.target.value)}
+          className="h-9"
         >
           <option value="all">כל הנושאים</option>
           {topics.map((topic) => (

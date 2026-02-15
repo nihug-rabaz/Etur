@@ -44,18 +44,18 @@ export const Sidebar = () => {
     <aside
       data-sidebar
       className={cn(
-        "bg-background fixed top-0 z-30 h-screen w-64 transition-transform",
-        "right-0 border-l",
+        "bg-sidebar fixed top-0 z-30 h-screen w-64 border-l border-sidebar-border transition-transform",
+        "right-0",
       )}
     >
       <div className="flex h-full flex-col">
-        <div className="flex h-16 items-center border-b px-6">
-          <Link href="/" className="font-mono text-lg font-bold">
-            next-starter
+        <div className="flex h-14 items-center border-b border-sidebar-border px-5">
+          <Link href="/" className="text-lg font-semibold tracking-tight">
+            מערכת משימות
           </Link>
         </div>
 
-        <nav className="flex-1 space-y-1 p-4">
+        <nav className="flex-1 space-y-0.5 p-3">
           {navItems.map((item) => {
             const isActive = pathname === item.href;
             const Icon = item.icon;
@@ -65,21 +65,21 @@ export const Sidebar = () => {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                  "flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition-all",
                   isActive
-                    ? "bg-accent text-accent-foreground"
-                    : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+                    ? "bg-sidebar-accent text-sidebar-accent-foreground shadow-sm"
+                    : "text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground",
                 )}
               >
-                <Icon className="h-5 w-5" />
+                <Icon className="h-4 w-4" />
                 <span>{item.title}</span>
               </Link>
             );
           })}
         </nav>
 
-        <div className="p-4 pt-2">
-          <div className="flex items-center gap-3 rounded-lg px-3 py-2 bg-muted/50 mb-2">
+        <div className="border-t border-sidebar-border p-3">
+          <div className="flex items-center gap-3 rounded-md px-3 py-2.5 bg-sidebar-accent/30 mb-3">
             <Avatar
               name={session.user?.name || null}
               email={session.user?.email || ""}
@@ -87,16 +87,16 @@ export const Sidebar = () => {
               size="md"
             />
             <div className="flex-1 min-w-0">
-              <p className="font-medium text-sm truncate">
+              <p className="font-medium text-sm truncate text-sidebar-foreground">
                 {session.user?.name || session.user?.email || "משתמש"}
               </p>
               {session.user?.name && (
-                <p className="text-muted-foreground text-xs truncate">
+                <p className="text-sidebar-foreground/60 text-xs truncate">
                   {session.user?.email}
                 </p>
               )}
               {(session.user as any)?.role && (
-                <p className="text-muted-foreground text-xs mt-0.5">
+                <p className="text-sidebar-foreground/60 text-xs mt-0.5">
                   {(session.user as any)?.role}
                 </p>
               )}
@@ -111,20 +111,21 @@ export const Sidebar = () => {
               <Icons.logOut className="h-4 w-4" />
             </Button>
           </div>
-          <div className="border-t pt-10 flex items-center gap-2">
+          <div className="flex items-center gap-2">
             <Button
               asChild
-              variant={pathname === "/settings" ? "default" : "outline"}
+              variant={pathname === "/settings" ? "default" : "ghost"}
               size="icon"
               aria-label="הגדרות"
               className={cn(
+                "h-9 w-9",
                 pathname === "/settings" 
-                  ? "bg-accent text-accent-foreground hover:bg-accent hover:text-accent-foreground" 
-                  : "hover:bg-transparent hover:text-muted-foreground"
+                  ? "bg-sidebar-accent text-sidebar-accent-foreground" 
+                  : "hover:bg-sidebar-accent/50 text-sidebar-foreground/70"
               )}
             >
               <Link href="/settings">
-                <Icons.settings className="h-5 w-5" />
+                <Icons.settings className="h-4 w-4" />
               </Link>
             </Button>
             <ThemeSwitcher />

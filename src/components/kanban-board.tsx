@@ -62,7 +62,7 @@ export const KanbanBoard = ({
   }
 
   return (
-    <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
+    <div className="flex gap-3 overflow-x-auto pb-4">
       {sortedSections.map((section) => {
         const sectionTasks = tasksBySection[section] || [];
         const uniqueDomains = Array.from(new Set(sectionTasks.map(t => t.domain)));
@@ -70,13 +70,13 @@ export const KanbanBoard = ({
         return (
           <div
             key={section}
-            className="flex min-w-[320px] max-w-[320px] flex-col rounded-lg border-2 border-border bg-card shadow-md"
+            className="flex min-w-[340px] max-w-[340px] flex-col rounded-lg border border-border bg-card/50 backdrop-blur-sm"
           >
-            <div className="border-b-2 border-border bg-muted/50 p-4">
-              <div className="flex items-center justify-between">
+            <div className="border-b border-border bg-card p-3.5">
+              <div className="flex items-center justify-between mb-1.5">
                 <div className="flex items-center gap-2">
-                  <h2 className="text-lg font-bold text-foreground">{section}</h2>
-                  <span className="rounded-full border-2 border-border bg-background text-foreground px-2.5 py-1 text-xs font-bold shadow-sm">
+                  <h2 className="text-base font-semibold text-foreground">{section}</h2>
+                  <span className="rounded-full bg-muted text-muted-foreground px-2 py-0.5 text-xs font-medium">
                     {sectionTasks.length}
                   </span>
                 </div>
@@ -84,7 +84,7 @@ export const KanbanBoard = ({
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-7 w-7 rounded-full"
+                    className="h-7 w-7 rounded-md hover:bg-accent"
                     aria-label="הוסף משימה"
                     onClick={() => onCreateTask(uniqueDomains[0])}
                   >
@@ -93,15 +93,15 @@ export const KanbanBoard = ({
                 )}
               </div>
               {uniqueDomains.length > 0 && (
-                <p className="text-xs text-muted-foreground mt-1">
-                  {uniqueDomains.join(", ")}
+                <p className="text-[11px] text-muted-foreground font-medium">
+                  {uniqueDomains.join(" • ")}
                 </p>
               )}
             </div>
 
-            <div className="flex-1 space-y-3 overflow-y-auto p-4 max-h-[calc(100vh-280px)] scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
+            <div className="flex-1 space-y-2.5 overflow-y-auto p-3 max-h-[calc(100vh-280px)]">
               {sectionTasks.length === 0 ? (
-                <div className="py-8 text-center">
+                <div className="py-12 text-center">
                   <p className="text-muted-foreground text-sm">
                     אין משימות
                   </p>

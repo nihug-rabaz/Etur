@@ -45,9 +45,9 @@ export const metadata: Metadata = {
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="he" dir="rtl" suppressHydrationWarning>
-      <body className={cn("min-h-screen font-sans", fonts)}>
+      <body className={cn("min-h-screen font-sans antialiased", fonts)}>
         <SessionProvider>
-          <ThemeProvider attribute="class">
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <SidebarWrapper>{children}</SidebarWrapper>
           </ThemeProvider>
         </SessionProvider>

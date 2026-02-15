@@ -305,10 +305,10 @@ export default function MyTasksPage() {
   }
 
   return (
-    <div className="container mx-auto py-6">
-      <div className="mb-6 space-y-4">
+    <div className="container mx-auto py-5">
+      <div className="mb-5 space-y-3.5">
         <div className="flex items-center justify-between">
-          <h1 className="text-3xl font-bold">משימות שלי</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">משימות שלי</h1>
         </div>
 
         <SearchAndFilters
@@ -323,8 +323,8 @@ export default function MyTasksPage() {
         />
       </div>
 
-      <div className="flex gap-6">
-        <div className="flex-shrink-0" style={{ width: "520px" }}>
+      <div className="flex gap-4">
+        <div className="flex-shrink-0" style={{ width: "500px" }}>
           <PinnedTasksSidebar
             pinnedTasks={pinnedTasks}
             allTasks={filteredTasks}
